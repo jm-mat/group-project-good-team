@@ -3,33 +3,42 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 # Load training data
-imageSize = (96, 96)
+imageSize = (96, 96)									#Smaller input for FPGA(Basys 3) for PoC
 
 train_ds = keras.preprocessing.image_dataset_from_directory(
 	"data",
 	image_size = imageSize,
 	color_mode = "grayscale",
 	batch_size = 32,
-	label_mode = "binary"
+	label_mode = "categorical"				# 3 classes: safe/ unsafe / irrelevant
 )
 
 # CNN
-model = keras.Sequential([
-	layers.Rescaling(1./255, input_shape = (96, 96, 1)),
+def make_model():
+    return keras.Sequential([
+        layers.Rescaling(1./255, input_shape=(96,96,1)),
+        
+		layers.SeparableConv2D(8, 3, activation='relu', padding='same'),
+        layers.MaxPooling2D(),
+        
+		layers.SeparableConv2D(16, 3, activation='relu', padding='same'),
+        layers.MaxPooling2D(),
+        
+		layers.SeparableConv2D(32, 3, activation='relu', padding='same'),
+        layers.MaxPooling2D(),
 
-	layers.Conv2D(8,3, activation='relu'),
-	layers.MaxPooling2D(),
+		layers.GlobalAveragePooling2D(),									# Replace Flatten() (FPGA compatible)
+		layers.Dense(16, activation = 'relu'),
+        
+		layers.Dense(3,activation ='softmax')
+	])
 
-	layers.Conv2D(16,3, activation='relu'),
-	layers.MaxPooling2D(),
+# Base float model
+model = make_model()
 
-	layers.Conv2D(32,3, activation='relu'),
-	layers.MaxPooling2D(),
-
-	layers.Flatten(),
-	layers.Dense(32, activation='relu'),
-	layers.Dense(1, activation='sigmoid')
-])
+# Quantization-Aware Training
+quantize_model = tfmot.quantization.keras.quantize_model
+model = quantize_model(model)
 
 # Compile
 model.compile(
