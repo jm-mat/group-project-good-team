@@ -3,7 +3,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 # Load training data
-imageSize = (96, 96)									#Smaller input for FPGA(Basys 3) for PoC
+imageSize = (48, 48)									#Smaller input for FPGA(Basys 3) for PoC
 
 train_ds = keras.preprocessing.image_dataset_from_directory(
 	"data",
