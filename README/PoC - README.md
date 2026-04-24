@@ -37,7 +37,8 @@ Windows:
 
 ## Technical Stack
 Python 3.11
-TensorFlow
+TensorFlow 2.12
+TFMOT 0.7.3
 Pillow (PIL)
 OpenCV (cv2)
 NumPy 
