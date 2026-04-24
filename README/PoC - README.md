@@ -30,9 +30,13 @@ Windows:
 - run scripts (python train_cnn.py /python predictimage.py/ python predictvideo.py) 
 
 ## Demo
+**Model training completed**
 ![Model training completed](model_training_output.png)
-![Result of sample_input1 in predictimage.py](safe_output.jpg)
-![Result of sample_input2 in predictimage.py](unsafe_output.png)
+**Result of sample_input1 in predictimage.py**
+![Result of sample_input1 in predictimage.py](safe_output.png)
+**Result of sample_input2 in predictimage.py**
+![Result of sample_input2 in predictimage.py](unsafe_output.jpg)
+**Result of input_video in predictvideo.py**
 ![Result of input_video in predictvideo.py](predictvideo_output.gif)
 
 ## Technical Stack
