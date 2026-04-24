@@ -4,22 +4,28 @@ from tensorflow.keras import layers
 import tensorflow_model_optimization as tfmot
 
 # Load training data
-imageSize = (48, 48)									#Smaller input for FPGA(Basys 3) for PoC
+imageSize = (48, 48)						# Smaller input for FPGA(Basys 3) used for PoC
 
 train_ds = keras.preprocessing.image_dataset_from_directory(
 	"data",
 	image_size = imageSize,
 	color_mode = "grayscale",
 	batch_size = 32,
-	label_mode = "categorical"				# 3 classes: safe/ unsafe / irrelevant
+	label_mode = "categorical"				# 3 classes: safe/ unsafe /irrelevant
 )
+
+# Preprocess the image outside of making the model
+def preprocess(image, label):
+    img = tf.cast(image, tf.float32) / 255.0
+    return img, label
+
+train_ds = train_ds.map(preprocess)
 
 # CNN
 def make_model():
     return keras.Sequential([
-        layers.Rescaling(1./255, input_shape=(96,96,1)),
         
-		layers.SeparableConv2D(8, 3, activation='relu', padding='same'),
+		layers.SeparableConv2D(8, 3, activation='relu', padding='same', input_shape =(48,48,1)),
         layers.MaxPooling2D(),
         
 		layers.SeparableConv2D(16, 3, activation='relu', padding='same'),
@@ -28,7 +34,7 @@ def make_model():
 		layers.SeparableConv2D(32, 3, activation='relu', padding='same'),
         layers.MaxPooling2D(),
 
-		layers.GlobalAveragePooling2D(),									# Replace Flatten() (FPGA compatible)
+		layers.GlobalAveragePooling2D(),									# Replace flatten (FPGA compatible)
 		layers.Dense(16, activation = 'relu'),
         
 		layers.Dense(3,activation ='softmax')
