@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+import tensorflow_model_optimization as tfmot
 
 # Load training data
 imageSize = (48, 48)									#Smaller input for FPGA(Basys 3) for PoC
