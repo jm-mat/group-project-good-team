@@ -7,6 +7,21 @@ import numpy as np
 import cv2
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+import serial
+import time
+
+COM_PORT = "COM5"       # Windows: "COM3", "COM4" etc.
+                        # Linux/Mac: "/dev/ttyUSB0" or "/dev/tty.usbserial-xxx"
+BAUD_RATE = 9600
+
+ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=1,
+                    dsrdtr=False,      # disable DSR/DTR
+                    rtscts=False)      # disable RTS/CTS
+ser.dtr = False    # explicitly hold DTR low so it doesn't reset
+ser.rts = False
+time.sleep(2)
+time.sleep(2)  # wait for ESP32 to finish rebooting after serial connect
+
 
 # Hide the root Tk window
 Tk().withdraw()
@@ -27,6 +42,11 @@ print("Loading model...")
 model = keras.models.load_model("cnn_bed_fall_detection.h5", compile=False)
 print("Model loaded.")
 
+def send_alert(state: bool):
+    cmd = b'1' if state else b'0'
+    ser.write(cmd)
+    print(f"[Serial] Sent alert {'ON' if state else 'OFF'}")
+
 def preprocess_frame(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     resized = cv2.resize(gray, (32, 32))
@@ -42,7 +62,7 @@ if not cap.isOpened():
     exit()
 
 print("Starting video processing...")
-
+unsafe_num = 0
 while True:
     ret, frame = cap.read()
     if not ret:
@@ -54,7 +74,8 @@ while True:
 
     prediction = classes[np.argmax(probabilities)]
     irr, safe, unsafe = probabilities
-
+    if prediction == "UNSAFE":
+        unsafe_num += 1
     text = f"{prediction} | Irr:{irr:.2f} Safe:{safe:.2f} Unsafe:{unsafe:.2f}"
 
     color = (0, 255, 0) if prediction == "SAFE" else \
@@ -68,6 +89,14 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    
+    if unsafe_num >= 5:
+        send_alert(True);
+        time.sleep(0.5)
+        break
 
 cap.release()
 cv2.destroyAllWindows()
+print(f'Unsafe Frames: {unsafe_num}\n')
+
+
