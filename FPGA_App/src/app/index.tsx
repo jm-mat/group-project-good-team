@@ -6,9 +6,32 @@ import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
+import { useEffect, useRef } from 'react';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 
 export default function HomeScreen() {
+  const wasFalling = useRef(false);
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      try {
+        const response = await fetch('http://192.168.0.152:3000/status');
+        const data = await response.json();
+        if (data.isFalling && !wasFalling.current) {
+          wasFalling.current = true;
+          Alert.alert(
+          'Fall Warning',
+          'The server reported that a fall may be occurring.'
+          );
+        }
+        if (!data.isFalling) {
+          wasFalling.current = false;
+        }
+      } catch (error) {
+        console.log('Could not connect to fall server:', error);
+      }
+    }, 1000);
+  return () => clearInterval(timer);
+  }, []);
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
