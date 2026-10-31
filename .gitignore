@@ -160,4 +160,5 @@ docker-data/
 # ===========================
 # Project Specific
 # ===========================
-# Add project-specific ignores below
+**/.expo/
+**/node_modules/
