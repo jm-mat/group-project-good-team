@@ -29,10 +29,11 @@ mock_mode:
     - "python tests/mock_E2E.py http://localhost:3000"
 
 demo:
-  video: "https://youtu.be/..."
+  video: "https://youtu.be/loJsuPNsrss"
   screenshots:
-   -
-   -
-   -
-   -
+  - Implementation_README/automated_test_logs.png
+  - Implementation_README/mobile_app_logs.png
+  - Implementation_README/predictfpga_logs.png
+  - Implementation_README/server_runnning.png
+
 notes: "The grader can run the software and mock mobile-server tests without FPGA hardware. The RTL/HLS integration and Basys3 hardware operation will be verified on the team's hardware and are demonstrated in the video. The Vivado testbench remains available under src/Hardware_Files/sim for optional reproduction."
