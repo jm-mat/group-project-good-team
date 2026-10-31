@@ -31,7 +31,7 @@ const server = http.createServer((request, response) => {
   response.end(JSON.stringify({ error: 'Not found' }));
 });
 
-const port = Number(process.env.PORT || 3000);
+const port = Number(process.env.PORT || 50222);
 
 server.listen(port, '0.0.0.0', () => {
   console.log(
