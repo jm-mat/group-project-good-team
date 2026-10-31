@@ -16,7 +16,7 @@ from serial import SerialException
 # ---------------------------------------------------------------------------
 
 # Serial port connected to the FPGA.
-UART_PORT = "COM3"
+UART_PORT = "COM5"
 
 # Must match the baud rate used by the FPGA UART.
 BAUDRATE = 115200
@@ -60,7 +60,7 @@ EXPECTED_PACKET_SIZE = FRAME_SIZE * FRAME_SIZE
 # IP address of the computer running server.js.
 #
 # Replace this address if the computer's Wi-Fi IP address changes.
-APP_SERVER_URL = "http://192.168.1.72:3000"
+APP_SERVER_URL = "http://192.168.1.72:50222"
 
 
 # ---------------------------------------------------------------------------
