@@ -19,7 +19,7 @@ import {
   Spacing,
 } from '@/constants/theme';
 
-const FALL_SERVER_URL = 'http://192.168.1.72:3000';
+const FALL_SERVER_URL = 'http://192.168.1.72:50222';
 
 export default function HomeScreen() {
   const wasFalling = useRef(false);
