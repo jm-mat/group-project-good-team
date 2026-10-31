@@ -219,13 +219,20 @@ The simulation uses a deterministic HLS stub and does not require a physical FPG
 
 ## Demo
 Demo video:
-https://youtu.be/...
+https://youtu.be/loJsuPNsrss
 
-Available screenshots and demonstration files include:
--
--
--
--
+Available screenshots:
+Automated tests
+![Automated tests](automated_test_logs.png)
+Mobile app running
+![Mobile app running](mobile_app_logs.png)
+predictfpga.py logs
+![predictfpga.py logs](predictfpga_logs.png)
+Server running
+![server running](server_runnning.png)
+
+
+![Result of input_video in predictvideo.py](predictvideo_output.gif)
 The physical FPGA and mobile-app integration are demonstrated in the video because the grader does not have access to the team's Basys-3 hardware.
 ## Technical Stack
 Languages
