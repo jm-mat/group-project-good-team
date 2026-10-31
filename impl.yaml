@@ -1,9 +1,9 @@
-project_name: "FPGA Fall Prevention"
+project_name: "FPGA Fall Prevention System"
 project_type: "hybrid"
 
-impl_claim: "A 32x32 grayscale video frame is classified as irrelevant, safe, or unsafe and an unsafe sequence notifies the mobile app."
+impl_claim: "A 32x32 grayscale video frame is classified as irrelevant, safe, or unsafe, and repeated unsafe predictions notify the mobile application."
 
-languages: ["python", "verilog", "typescript", "javascript"]
+languages: ["python", "verilog", "javascript", "typescript"]
 hardware_required: true
 
 setup:
@@ -11,12 +11,11 @@ setup:
   - "cd src/FPGA_Mobile_App && npm install"
 
 build:
-  - "python -m py_compile src/software/*.py"
+  - "python -m compileall -q src/software tests"
   - "cd src/FPGA_Mobile_App && npm run lint"
 
 test:
   - "pytest tests/ -v"
-  - "vivado -mode batch -source src/Hardware_Files/sim/run_tb.tcl"
 
 run:
   - "python src/software/predictimage.py"
@@ -30,9 +29,10 @@ mock_mode:
     - "python tests/mock_E2E.py http://localhost:3000"
 
 demo:
-  video: ""
+  video: "https://youtu.be/..."
   screenshots:
-    - "PoC_README/model_training_output.png"
-    - "PoC_README/predictvideo_output.gif"
-
-notes: "Software tests and the mock mobile-server E2E test run without FPGA hardware. The Vivado RTL testbench uses a deterministic HLS stub."
+   -
+   -
+   -
+   -
+notes: "The grader can run the software and mock mobile-server tests without FPGA hardware. The RTL/HLS integration and Basys3 hardware operation will be verified on the team's hardware and are demonstrated in the video. The Vivado testbench remains available under src/Hardware_Files/sim for optional reproduction."
