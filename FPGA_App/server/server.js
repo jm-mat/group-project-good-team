@@ -19,7 +19,7 @@ const server = http.createServer((request, response) => {
       signal: 'is_falling',
     }));
 
-    // Reset after five seconds so it can be tested again
+    // Reset after five seconds so the alert can be tested again.
     setTimeout(() => {
       isFalling = false;
     }, 5000);
@@ -31,6 +31,9 @@ const server = http.createServer((request, response) => {
   response.end(JSON.stringify({ error: 'Not found' }));
 });
 
-server.listen(3000, '0.0.0.0', () => {
-  console.log('Fall signal server running on port 3000');
+// Use port 3000 by default, or a custom PORT for automated tests.
+const port = Number(process.env.PORT || 50222);
+
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Fall signal server running on port ${port}`);
 });
